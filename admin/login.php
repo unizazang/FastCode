@@ -26,6 +26,95 @@
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+<dialog class="pop-up">
+      <div class="d-flex justify-content-center">
+        <img src="./img/fastcode_logo.png" alt="" />
+      </div>
+
+      <h2 class="popup-tt text-center">
+        본 웹사이트는 구직용 창작 포트폴리오 사이트로서 다른 LMS 사이트들과 무관함을 안내드립니다.
+      </h2>
+      <h2 class="pop-desc">
+        ※ 원활한 화면구현을 위해 최신 브라우저를 사용해주세요.
+      </h2>
+      <h2 class="pop-desc">
+      ※ 과정 말기 작품으로 프론트엔드와 백엔드를 연동했습니다.
+      </h2>
+      <h2 class="pop-desc">
+      ※ 포트폴리오 사이트이니 이상한 게시물 작성은 삼가주세요.
+      </h2>
+      <div class="pop-btns">
+        <a
+          href="https://github.com/unizazang/lakeside"
+          class="popup-git"
+          target="_blank"
+          ><i class="fa-brands fa-github"></i> 깃허브 바로가기</a
+        >
+        <a
+          href="https://github.com/unizazang/lakeside"
+          class="popup-profile"
+          target="_blank"
+          ><i class="fa-solid fa-arrow-up-right-from-square"></i> 상세 페이지</a
+        >
+      </div>
+
+      <h2>제작기간 : 2022.12.28 ~ 2023. 02.10</h2>
+      <div class="popup-pages">
+        <h2>구현 완료 페이지:</h2>
+        <a href="index.html" class="yoon">로그인 </a>
+        <a href="notice.html" class="yoon">메인페이지(대시보드)</a>
+        <a href="course.html">과정 카테고리</a>
+        <a href="login.php">강좌리스트</a>
+        <a href="board.php">쿠폰 관리</a>
+        <a href="book.php">공지사항 게시판</a>
+        <h3>※ 모든 페이지는 관리자 로그인 후 접속 가능합니다. id:admin, pw:0000 </h3>
+      </div>
+      <div class="pop-desc-wrap">
+        <h2>주요 사용 언어 : <span>HTML, CSS, Javascript, PHP, SQL</span></h2>
+        <h2>주요 사용 테크닉 : <span>PHP와 MySQL을 이용한 DB 연동, 동적인 페이지 구현</span></h2>
+      </div>
+      <div class="pop-desc-wrap">
+        <h2>
+          제작 팀원 : 손*진, 박*지, 오*경, 유*은, 장*홍, <span class="yoon">이윤희</span>
+        </h2>
+        <ul>
+          <li>
+            <h2>
+              기획 : 문*닮 50%, <span class="yoon">이윤희</span> 25%, 윤*혁 25%
+            </h2>
+          </li>
+          <li>
+            <h2>디자인 : 유*은 100%</h2>
+          </li>
+          <li class="coding">
+            구현:
+            <ul>
+              <li>
+                <h2>
+                  <span class="yoon"
+                    >이윤희 - 메인, 노티스, 배너, 푸터, pager</span
+                  >
+                </h2>
+              </li>
+              <li><h3>문*닮 - 코스, 위젯, 메뉴</h3></li>
+              <li><h3>윤*혁 - 로그인, 게시판, 예약</h3></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <button
+        class="popup-close d-flex justify-content-center align-items-center"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="cookie">
+        <label for="dont-see">오늘 하루 보지 않기</label>
+        <input id="dont-see" type="checkbox" />
+      </div>
+    </dialog>
+    <!-- </dialog> -->
+
+
   <main>
     <h1 id="main-logo"><a href="/"><img src="img/fastcode_logo_big.png" alt="Fastcode"><span>fastcode</span></a></h1>
     <form action="login_ok.php" method="post">
