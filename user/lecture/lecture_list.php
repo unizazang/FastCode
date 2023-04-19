@@ -201,7 +201,6 @@
     levelsArray[i] = jsonArray[i].labels;
     i++;
   }
-  
   let searchKeyword = '';
   let recomCategory = '';
   let checkedCate = [];
@@ -345,6 +344,7 @@
         rangePrice: rangePrice,
         lectureCount : lectureCount,
         searchKeyword: searchKeyword
+
       };
       $.ajax({
 

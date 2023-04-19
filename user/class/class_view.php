@@ -7,8 +7,10 @@
   $username = $_SESSION['USERNAME'];
 
   if(!$userid){
-    alert('로그인이 필요합니다.');
-    exit;
+    echo "<script>
+      alert('로그인이 필요합니다.');
+      location.href = '../index.php';
+    </script>";
   } 
 
   $lecid = $_GET['lecid'];
