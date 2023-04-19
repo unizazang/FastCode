@@ -24,6 +24,7 @@
   <meta name="theme-color" content="#ffffff">
   <title>Admin Login | FASTCODE</title>
   <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/popup.css">
 </head>
 <body>
 <dialog class="pop-up">
@@ -41,63 +42,73 @@
       ※ 과정 말기 작품으로 프론트엔드와 백엔드를 연동했습니다.
       </h2>
       <h2 class="pop-desc">
-      ※ 포트폴리오 사이트이니 이상한 게시물 작성은 삼가주세요.
+      ※ 포트폴리오 사이트이니 이상한 게시글의 작성은 삼가주세요.
       </h2>
       <div class="pop-btns">
         <a
-          href="https://github.com/unizazang/lakeside"
+          href="https://github.com/unizazang/FastCode"
           class="popup-git"
           target="_blank"
           ><i class="fa-brands fa-github"></i> 깃허브 바로가기</a
         >
         <a
-          href="https://github.com/unizazang/lakeside"
+          href="https://github.com/unizazang/FastCode"
           class="popup-profile"
           target="_blank"
-          ><i class="fa-solid fa-arrow-up-right-from-square"></i> 상세 페이지</a
+          ><i class="fa-solid fa-arrow-up-right-from-square"></i> 포트폴리오 상세</a
         >
       </div>
 
       <h2>제작기간 : 2022.12.28 ~ 2023. 02.10</h2>
       <div class="popup-pages">
         <h2>구현 완료 페이지:</h2>
-        <a href="index.html" class="yoon">로그인 </a>
-        <a href="notice.html" class="yoon">메인페이지(대시보드)</a>
-        <a href="course.html">과정 카테고리</a>
-        <a href="login.php">강좌리스트</a>
-        <a href="board.php">쿠폰 관리</a>
-        <a href="book.php">공지사항 게시판</a>
-        <h3>※ 모든 페이지는 관리자 로그인 후 접속 가능합니다. id:admin, pw:0000 </h3>
+        <a href="./login.php">로그인 </a>
+        <a href="./dashboard/">메인페이지(대시보드)</a>
+        <a href="./category/category_list.php">과정 카테고리</a>
+        <a href="./lecture/lecture_list.php">강좌리스트</a>
+        <br>
+        <a href="./coupon/coupon_list.php" class="yoon">쿠폰 관리</a>
+        <a href="./board/board_index.php" class="yoon">공지사항 게시판</a>
+        <h3>※ 모든 페이지는 관리자 로그인 후 접속 가능합니다.</h3>
       </div>
+
       <div class="pop-desc-wrap">
         <h2>주요 사용 언어 : <span>HTML, CSS, Javascript, PHP, SQL</span></h2>
-        <h2>주요 사용 테크닉 : <span>PHP와 MySQL을 이용한 DB 연동, 동적인 페이지 구현</span></h2>
-      </div>
-      <div class="pop-desc-wrap">
+        <h2>주요 테크닉 : <span>PHP와 MySQL을 이용한 DB 연동</span></h2>
         <h2>
           제작 팀원 : 손*진, 박*지, 오*경, 유*은, 장*홍, <span class="yoon">이윤희</span>
         </h2>
+        
         <ul>
           <li>
-            <h2>
-              기획 : 문*닮 50%, <span class="yoon">이윤희</span> 25%, 윤*혁 25%
-            </h2>
+            <h2>공동기획 : 전원 참여</h2>
           </li>
           <li>
-            <h2>디자인 : 유*은 100%</h2>
+            <h2>기획 : 박*지, 오*경, <span class="yoon">이윤희</span></h2>
+          </li>
+          <li>
+            <h2>디자인 : 손*진, 유*은, 장*홍</h2>
           </li>
           <li class="coding">
-            구현:
+          <h2>구현 :</h2>
             <ul>
               <li>
-                <h2>
-                  <span class="yoon"
-                    >이윤희 - 메인, 노티스, 배너, 푸터, pager</span
-                  >
-                </h2>
+                <h3>
+                  로그인, 메인페이지(대시보드) : 박*지(html, css, js), 장*홍(js,
+                  php)
+                </h3>
               </li>
-              <li><h3>문*닮 - 코스, 위젯, 메뉴</h3></li>
-              <li><h3>윤*혁 - 로그인, 게시판, 예약</h3></li>
+              <li>
+                <h3>
+                  과정 카테고리, 강좌 리스트 : 오*경(html, css, js), 손*진(js,
+                  php)
+                </h3>
+              </li>
+              <li>
+                <h3>
+                  <a href="./coupon/coupon_list.php" class="yoon">쿠폰관리</a> <a href="./board/board_index.php" class="yoon">공지사항 게시판</a> : 유*은(html, css), <span class="yoon">이윤희(js, php)</span>
+                </h3>
+              </li>
             </ul>
           </li>
         </ul>
@@ -122,12 +133,12 @@
       <p class="field">
         <label for="username">username</label>
         <i class="fa-solid fa-user"></i>
-        <input type="text" id="username" name="userid" placeholder="username">
+        <input type="text" id="username" name="userid" placeholder="admin">
       </p>
       <p class="field">
         <label for="password">password</label>
         <i class="fa-solid fa-lock"></i>
-        <input type="password" id="password" name="passwd" placeholder="password">
+        <input type="password" id="password" name="passwd" placeholder="0000">
       </p>
       <input type="submit" value="LOGIN" class="y-btn login-btn btn-navy">
     </form>
@@ -137,5 +148,6 @@
     <div><i class="fa-solid fa-sailboat"></i></div>
     <img src="img/login_wave_top.png" alt="background" class="bg-top">
   <!-- </div> -->
+  <script src="./popup.js"></script>
 </body>
 </html>

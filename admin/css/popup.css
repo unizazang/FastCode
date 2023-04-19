@@ -1,0 +1,164 @@
+/* =========================== popup ============================= */
+
+:root {
+  --small-content-fz: 14px;
+}
+
+.pop-up {
+  box-shadow: 0px 30px 20px rgba(40, 66, 115, 0.25);
+}
+
+.pop-up * {
+  line-height: 27px;
+  font-size: var(--small-content-fz);
+}
+
+.pop-up img {
+  box-shadow: none !important;
+  width: 140px;
+  margin-bottom: 20px;
+}
+
+.pop-up {
+  z-index: 99999;
+  width: 500px;
+  padding: 30px 40px 0px 40px;
+  position: fixed;
+  top: 5%;
+  left: -62%;
+  background: white;
+  border: 5px solid var(--primary-green);
+  border-radius: 5px;
+}
+
+.popup-pages a:not(.yoon) {
+  font-size: var(--small-content-fz);
+  font-weight: 400;
+}
+
+.popup-pages {
+  margin-bottom: 5px;
+}
+
+a.yoon:last-of-type::after {
+  content: none;
+}
+
+.pop-up h2 {
+  font-weight: 700;
+}
+.pop-up h2 span {
+  font-weight: 400;
+}
+
+.pop-up h3 {
+  font-weight: 400;
+}
+
+.pop-up a {
+  /* font-size: var(--second-content-fz); */
+  font-weight: 600;
+  color: #282828 !important;
+  transition: color 0.3s;
+}
+
+.popup-pages a:hover {
+  color: #0d6efd !important;
+}
+
+.pop-up a::after {
+  content: ",";
+}
+.pop-up a:last-child:after {
+  display: none;
+}
+
+.pop-up .popup-tt {
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #adadad;
+}
+.pop-up .popup-tt + h2 {
+  padding-top: 12px;
+}
+
+.popup-close {
+  border: none;
+  width: 30px;
+  height: 30px;
+  background: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.pop-up label {
+  font-size: var(--small-content-fz);
+}
+
+.cookie {
+  display: flex;
+  align-items: center;
+  padding: 20px 0 20px;
+  border-top: 1px solid #adadad;
+  margin-top: 20px;
+}
+.cookie input {
+  margin-left: 5px;
+}
+.pop-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pop-up .popup-git,
+.pop-up .popup-profile {
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 38px;
+  line-height: 38px;
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid #0d6efd;
+  margin: 15px 0;
+  transition: background 0.3s, color 0.3s ease-in;
+}
+
+.pop-up .popup-git::after {
+  content: "";
+}
+
+.pop-up .popup-git .fa-github,
+.pop-up .popup-git .fa-arrow-up-right-from-square {
+  font-size: 20px;
+  padding-right: 5px;
+}
+
+.pop-up .popup-git:hover {
+  background: var(--primary-green);
+  color: #fff;
+}
+
+.pop-up .pop-desc {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 23px;
+}
+
+.pop-up .yoon {
+  background: #ecffa7;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.pop-desc-wrap {
+  margin-top: 15px;
+}
+
+.pop-desc-wrap .coding {
+  padding-top: 10px;
+}
