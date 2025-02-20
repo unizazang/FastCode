@@ -52,13 +52,13 @@
         $rsc[] = $rs;
     }  
 
-    // Update image paths to use /pdata/
+    // Update image paths to use ./coupon_image/
     function sanitizeImagePath($file) {
         if (empty($file)) return '';
         
-        // If the path doesn't start with /pdata/, prepend it
-        if (strpos($file, '/pdata/') !== 0) {
-            return '/pdata/' . basename($file);
+        // If the path doesn't start with coupon_image/, prepend it
+        if (strpos($file, 'coupon_image/') !== 0) {
+            return 'coupon_image/' . basename($file);
         }
         
         return $file;
@@ -113,7 +113,7 @@
         ?>    
         <li id="<?= $r -> cid;?>"  class="coupon_list">
             <figure>
-                <img src="<?= htmlspecialchars(sanitizeImagePath($r -> file)); ?>" alt="" />
+                <img src="./<?= htmlspecialchars(sanitizeImagePath($r -> file)); ?>" alt="<?= htmlspecialchars($r -> coupon_name); ?>" />
             </figure>
             <div class="titles">
                 <div class="big_titles">
@@ -225,112 +225,62 @@
 <script src="../board/functions.js"></script>
 
 <script>
-    // 삭제 팝업 모달
-    function show() {
-    document.querySelector(".background").className = "background show";
-  }
-
   // 삭제 버튼(바깥)을 누르면 할일
   $(".del").click(function(){
-    $(".background").addClass('show');
-    let li = $(this).closest('li');
-    let cid = li.attr('id');
-    let title = li.find('.lititle').text();
-    $(".background").find('input').attr('placeholder',title);
-
-    //삭제하시겠습니까? 안쪽 삭제 버튼 누르면 할일.
-    $('#deletebtn').click(()=>{
-      delAjax(cid, './coupon_delete.php', './coupon_list.php')
-    });
+    let row = $(this).closest('li');
+    let idx = row.attr('id');
+    let title = row.find('.lititle').text();
     
+    // 모달 보이기
+    $(".background").addClass('show');
+    $(".background input[type='text']").val(title);
+    $("#deletebtn").data('idx', idx);
   });
-  
-  // 취소 버튼 누르면 할일
+
   $("#close").click(function(){
     $(".background").removeClass('show');
   });
 
-// ======================= form 안쓰고 옵션 바꾸기 실험 ==============================
+  //삭제하시겠습니까? 안쪽 삭제 버튼 누르면 할일
+  $('#deletebtn').click(function(){
+    let idx = $(this).data('idx');
 
+    let data = {
+      idx: idx,
+    }
+    delAjax(idx, './coupon_delete.php', './coupon_list.php')
+  });
+
+  // 쿠폰 상태 변경 기능
   $(".coupon_select .form-select").change(function(){
-    let selectedStatus = $(this).find("option:selected").val(); //여기 바꿔놨음 this로
+    let selectedStatus = $(this).find("option:selected").val();
     let selectedidx = $(this).closest('li').attr('id');
 
     let data = {
-        selectedStatus : selectedStatus,
-        selectedidx : selectedidx
+      selectedStatus: selectedStatus,
+      selectedidx: selectedidx
     };
-        $.ajax({
-            async : false ,
-            type : 'post' ,
-            url : './coupon_option_change.php' ,
-            data  : data ,
-            dataType : 'html' ,
-            error : function() {
-                alert('에러');
-            },
-            success : function(returned_data) {
-                alert('쿠폰 상태가 변경되었습니다.');
-            }
-        });
-    });
 
-/* ======================= 북마크 ========================= */
-
-//북마크
-let bookmark = String(<?php echo json_encode($book_mark);?>);
-  // console.log('$_SESSION[ADBOOK] : ' + bookmark);
-  if(bookmark != '0') {
-    if (bookmark.indexOf('7') != -1 ) {
-      $('#bookmark1').attr("checked", true);
-    } else {
-      $('#bookmark1').attr("checked", false);
-    }
-  }
-
-  $('#bookmark1').click(function() {
-    let checked = $(this).is(":checked");
-
-    if(checked == true) {
-      if (bookmark.length < 10) {
-        if(bookmark != '0') {
-          bookmark += ',7';  
-        } else {
-          bookmark = bookmark.replace('0', '');
-          bookmark += '7';
-        }
-      } else {
-        alert('즐겨찾기는 최대 6개까지만 설정 가능합니다.');
-        $('.bookmark input').prop("checked", false);
-      }
-
-    } else {
-      if(bookmark == '7') {
-        bookmark = '0';
-      } else {
-        bookmark = bookmark.replace(',7' , '');
-      }  
-    }
-
-    let data = {
-      bookmark: bookmark
-    }
     $.ajax({
-      type: 'POST',
-      url: '../dashboard/bookmark.php',
+      async: false,
+      type: 'post',
+      url: './coupon_option_change.php',
       data: data,
-      dataType: 'html',
-      error: function(){
-        alert('실패');
+      dataType: 'json',
+      error: function() {
+        alert('상태 변경 중 오류가 발생했습니다.');
       },
-      success: function (result) {
-        bookmark = result;
-        console.log(bookmark);
+      success: function(result) {
+        if (result.result === true) {
+          alert('쿠폰 상태가 변경되었습니다.');
+        } else {
+          alert('상태 변경에 실패했습니다.');
+          // 실패 시 선택 원복
+          $(".coupon_select .form-select").val(selectedStatus === '1' ? '0' : '1');
+        }
       }
     });
   });
-
-
 </script>
 
 <?php 

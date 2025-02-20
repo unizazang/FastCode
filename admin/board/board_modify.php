@@ -1,36 +1,77 @@
 <?php 
     session_start();
-    if(!$_SESSION['AUID']){
-      echo "<script>
-              alert('접근 권한이 없습니다');
-              history.back();
-          </script>";
-    };
+    
+    // Include database connection
+    include __DIR__ . '/../../inc/db.php';
 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    // Improved authentication check
+    if (!isset($_SESSION['AUID'])) {
+        echo "<script>
+                alert('접근 권한이 없습니다');
+                location.href = '../login.php';
+            </script>";
+        exit;
+    }
 
-    $bno = $_GET['idx'];
-    $sql = "SELECT * from board WHERE idx='{$bno}'";
-    $result = $mysqli -> query($sql); 
-    $row = $result -> fetch_assoc(); 
+    // Validate and sanitize input
+    $bno = filter_input(INPUT_GET, 'idx', FILTER_VALIDATE_INT);
+    
+    if (!$bno) {
+        echo "<script>
+                alert('잘못된 접근입니다');
+                history.back();
+            </script>";
+        exit;
+    }
 
+    try {
+        // Use prepared statement
+        $sql = "SELECT * FROM board WHERE idx = ?";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $bno);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if (!$result) {
+            throw new Exception("데이터베이스 쿼리 실행 실패");
+        }
+        
+        $row = $result->fetch_assoc();
+        
+        if (!$row) {
+            echo "<script>
+                    alert('해당 게시물을 찾을 수 없습니다');
+                    history.back();
+                </script>";
+            exit;
+        }
+    } catch (Exception $e) {
+        error_log("Board Modify Error: " . $e->getMessage());
+        echo "<script>
+                alert('오류가 발생했습니다. 관리자에게 문의해주세요.');
+                history.back();
+            </script>";
+        exit;
+    }
+
+    // Include head with relative path
+    include __DIR__ . '/../../inc/head.php';
 ?>
 
 <link rel="stylesheet" href="../css/board_write.css">
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
 </div>
 <!-- 로고 및 북마크 위치 끝 -->
 
 <!-- 본문시작 -->
-
 <h2 class="page-title">글 수정</h2>
 
-<form action="./board_modify_ok.php" method="POST" enctype="multipart/form-data" >
-  <input type="hidden" name="idx" value="<?= $bno ?>">
+<form action="./board_modify_ok.php" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="idx" value="<?= htmlspecialchars($bno) ?>">
   <div class="pd-54">
     <div class="subject">
       <label for="subject">제목</label>
@@ -40,7 +81,7 @@
         name="title"
         required
         placeholder="제목을 입력하세요"
-        value="<?= $row['title']; ?>"
+        value="<?= htmlspecialchars($row['title']); ?>"
       >
     </div>
     <div class="content">
@@ -51,45 +92,36 @@
         cols="30"
         rows="10"
         placeholder="내용을 입력하세요"
-      ><?= $row['content']; ?>
-      </textarea>
+        required
+      ><?= htmlspecialchars($row['content']); ?></textarea>
     </div>
 
-    <div class="files">
-      <h3>첨부파일</h3>
-      <div class="files_container">
-        <label for="files" class="files_btn">파일 선택</label>
-        <input
-        type="file"
-        name="file"
-        id="files"
-          class="form-control form-control-lg"
-        value="<?= $row['file']; ?>"
-        >
-      </div>
+    <!-- 기존 파일 처리 로직 -->
+    <?php if (!empty($row['file']) && $row['is_img'] == 1): ?>
+    <div class="existing-file">
+        <label>현재 이미지</label>
+        <img src="./board_files/<?= htmlspecialchars($row['file']); ?>" alt="현재 이미지">
+    </div>
+    <?php endif; ?>
+
+    <div class="file-upload">
+      <label for="board_file">첨부 파일</label>
+      <input 
+        type="file" 
+        id="board_file" 
+        name="board_file" 
+        accept="image/jpeg,image/png,image/gif"
+      >
     </div>
 
-    <div class="user_select">
-        <label for="user_cat">작성권한</label>
-        <select class="form-select" name="authority" id="user_cat">
-          <option value="1" <?php if($row['authority'] == 1) echo 'selected' ?>>관리자</option>
-          <option value="2" <?php if($row['authority'] == 2) echo 'selected' ?> >관리자2</option>
-        </select>
+    <div class="btns">
+      <button type="submit" class="y-btn big-btn btn-navy">등록완료</button>
+      <a href="./board_read.php?idx=<?= $bno ?>" class="y-btn big-btn btn-sky">등록취소</a>
     </div>
-  </div>
-  <!-- 내가수정 -->
-  <div class="btns">
-    <button type="submit" class="y-btn big-btn btn-navy">등록완료</button>
-    <a href="./board_read.php?idx=<?= $bno ?>" class="y-btn big-btn btn-sky">등록취소</a>
   </div>
 </form>
 
-
-
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
-?>
-
-<?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . '/../../inc/footer.php';
+    include __DIR__ . '/../../inc/foot.php';
 ?>

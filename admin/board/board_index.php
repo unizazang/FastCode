@@ -193,31 +193,34 @@
 <script src="./functions.js"></script>
 
 <script>
-  function show() {
-    document.querySelector(".background").className = "background show";
-  }
-
   // 삭제 버튼(바깥)을 누르면 할일
   $(".del").click(function(){
-    $(".background").addClass('show');
-    let tr = $(this).closest('tr');
-    let idx = tr.attr('id');
-    let title = tr.find('.trtitle').text();
-    $(".background").find('input').attr('placeholder',title);
-
-    //삭제하시겠습니까? 안쪽 삭제 버튼 누르면 할일.
-    $('#deletebtn').click(()=>{
-      delAjax(idx, './board_delete.php', './board_index.php')
-    });
+    let row = $(this).closest('tr');
+    let idx = row.attr('id');
+    let title = row.find('.trtitle').text();
     
+    // 모달 보이기
+    $(".background").addClass('show');
+    $(".background input[type='text']").val(title);
+    $("#deletebtn").data('idx', idx);
   });
-  
-  // 취소 버튼 누르면 할일
+
   $("#close").click(function(){
     $(".background").removeClass('show');
   });
 
+  //삭제하시겠습니까? 안쪽 삭제 버튼 누르면 할일
+  $('#deletebtn').click(function(){
+    let idx = $(this).data('idx');
 
+    let data = {
+      idx: idx,
+    }
+    delAjax(idx, './board_delete.php', './board_index.php')
+  });
+</script>
+
+<script>
 /* ======================= 북마크 ========================= */
 
 //북마크

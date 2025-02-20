@@ -5,23 +5,41 @@
               alert('접근 권한이 없습니다');
               history.back();
           </script>";
+      exit;
     };
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+
+    include __DIR__ . '/../../inc/db.php';
+    include __DIR__ . '/../../inc/head.php';
 
 
-    $cno = $_GET['cid'];
-    $sql = "SELECT * from coupons WHERE cid='{$cno}'";
-    $result = $mysqli -> query($sql); 
-    $row = $result -> fetch_assoc(); 
+    $cno = filter_input(INPUT_GET, 'cid', FILTER_VALIDATE_INT);
+    if (!$cno) {
+        echo "<script>
+                alert('잘못된 쿠폰 ID입니다.');
+                history.back();
+            </script>";
+        exit;
+    }
 
+    $stmt = $mysqli->prepare("SELECT * FROM coupons WHERE cid = ?");
+    $stmt->bind_param("i", $cno);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
 
+    if (!$row) {
+        echo "<script>
+                alert('해당 쿠폰을 찾을 수 없습니다.');
+                history.back();
+            </script>";
+        exit;
+    }
 ?>
 
 <link rel="stylesheet" href="../css/coupon_up.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
 </div>
@@ -166,7 +184,7 @@
 <!-- 본문끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . '/../../inc/footer.php';
 ?>
 
 <script
@@ -176,18 +194,25 @@
 <script>
   $(function(){
     $("#coupon_use").trigger('change');
-  })
+
+    // Add click event to reset button to redirect to coupon list
+    $('button[type="reset"]').click(function(e){
+      e.preventDefault(); // Prevent default reset behavior
+      window.location.href = './coupon_list.php'; // Redirect to coupon list
+    });
+  });
+
+  $("#coupon_start_date, #coupon_end_date").hide();
+  $("#coupon_use").change(function () {
+    if ($(this).val() == "2") {
+      $("#coupon_start_date, #coupon_end_date").show();
+    } else {
       $("#coupon_start_date, #coupon_end_date").hide();
-      $("#coupon_use").change(function () {
-        if ($(this).val() == "2") {
-          $("#coupon_start_date, #coupon_end_date").show();
-        } else if ($(this).val() == "1") {
-          $("#coupon_start_date, #coupon_end_date").hide();
-        }
-      });
+    }
+  });
 </script>
 
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . '/../../inc/foot.php';
 ?>

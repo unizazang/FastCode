@@ -63,9 +63,9 @@
                 ?>
                 <!-- 이미지일때 -->
                 <?php 
-                $imagePath = "/pdata/" . basename($rsc -> file);
+                $imagePath = "./board_files/" . htmlspecialchars($rsc -> file);
                 ?>
-                <img src="<?= htmlspecialchars($imagePath); ?>" alt="Board Image" target="blank"><br><br>
+                <img src="<?= $imagePath; ?>" alt="Board Image" target="blank"><br><br>
               <?php } ?>
               <?= nl2br(htmlspecialchars($rsc -> content)); ?>
               <br>
