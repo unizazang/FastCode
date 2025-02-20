@@ -1,51 +1,68 @@
 <?php 
     session_start();
-    if(!$_SESSION['AUID']){
-      echo "<script>
-              alert('접근 권한이 없습니다');
-              history.back();
-          </script>";
-    };
+    
+    // Improved authentication check
+    if (!isset($_SESSION['AUID'])) {
+        echo "<script>
+                alert('접근 권한이 없습니다');
+                location.href = '../login.php';
+            </script>";
+        exit;
+    }
 
-    $book_mark = $_SESSION['ADBOOK'];
-
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    // Include database connection
+    include __DIR__ . '/../../inc/db.php';
+    include __DIR__ . '/../../inc/head.php';
 
     /* ================== 페이지네이션 =================== */
+    $page = $_GET['page'] ?? 1;
 
-  $page = $_GET['page'] ?? 1;
+    try {
+        // Use prepared statement for pagination query
+        $pagesql = "SELECT COUNT(*) as cnt FROM board"; 
+        $page_stmt = $mysqli->prepare($pagesql);
+        $page_stmt->execute();
+        $page_result = $page_stmt->get_result();
+        $page_row = $page_result->fetch_assoc();
+        $row_num = $page_row['cnt']; // 전체 게시물 수
 
-  $pagesql = "SELECT COUNT(*) as cnt FROM board"; 
-  $page_result = $mysqli -> query($pagesql);
-  $page_row = $page_result ->fetch_assoc();
-  $row_num = $page_row['cnt'];//전체 게시물 수
+        $list = 5;
+        $block_ct = 5;
+        $block_num = ceil($page/$block_ct);
+        $block_start = (($block_num - 1) * $block_ct) + 1; 
+        $block_end = $block_start + $block_ct - 1;
 
-  $list = 5;
-  $block_ct = 5;
-  $block_num = ceil($page/$block_ct);
-  $block_start = (($block_num -1 )*$block_ct) + 1; 
-  $block_end = $block_start + $block_ct - 1;
+        $total_page = ceil($row_num/$list); 
+        if($block_end > $total_page) $block_end = $total_page;
+        $total_block = ceil($total_page/$block_ct);
+        $start_num = ($page - 1) * $list;
 
-  $total_page = ceil($row_num/$list); 
-  if($block_end > $total_page) $block_end = $total_page;
-  $total_block = ceil($total_page/$block_ct);
-  $start_num = ($page - 1) * $list;
+        /* ================== 값 조회 =================== */
+        $sql = "SELECT * FROM board ORDER BY idx DESC LIMIT ?, ?";
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("ii", $start_num, $list);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-
-    /* ================== 값 조회 =================== */
-
-    $sql = "SELECT * from board order by idx desc limit $start_num, $list";
-    $result = $mysqli -> query($sql) or die("Query Error! => ".$mysqli->error);
-    while($rs = $result->fetch_object()){
-        $rsc[] = $rs;
-    }  
+        $rsc = [];
+        while($rs = $result->fetch_object()){
+            $rsc[] = $rs;
+        }  
+    } catch (Exception $e) {
+        error_log("Database Error in board_index.php: " . $e->getMessage());
+        echo "<script>
+                alert('데이터베이스 오류가 발생했습니다');
+                history.back();
+            </script>";
+        exit;
+    }
 ?>
 
 <link rel="stylesheet" href="../css/board_delete.css" />
 <link rel="stylesheet" href="../css/board_index.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
         <div class="bookmark">
@@ -167,7 +184,8 @@
 
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+    include __DIR__ . '/../../inc/footer.php';
+    include __DIR__ . '/../../inc/foot.php';
 ?>
 <script
   src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
@@ -257,6 +275,3 @@ let bookmark = String(<?php echo json_encode($book_mark);?>);
   });
 
   </script>
-<?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
- ?>

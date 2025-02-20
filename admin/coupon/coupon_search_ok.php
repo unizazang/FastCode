@@ -86,7 +86,19 @@
         ?>    
         <li id="<?= $r -> cid;?>"  class="coupon_list">
             <figure>
-                <img src="<?= $r -> file; ?>" alt="" />
+                <?php 
+                    function sanitizeImagePath($file) {
+                        if (empty($file)) return '';
+                        
+                        // If the path doesn't start with /pdata/, prepend it
+                        if (strpos($file, '/pdata/') !== 0) {
+                            return '/pdata/' . basename($file);
+                        }
+                        
+                        return $file;
+                    }
+                ?>
+                <img src="<?= htmlspecialchars(sanitizeImagePath($r -> file)); ?>" alt="" />
             </figure>
             <div class="titles">
                 <div class="big_titles">

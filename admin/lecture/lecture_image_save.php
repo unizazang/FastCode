@@ -1,14 +1,27 @@
 <?php 
     session_start();
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    
+    // Include database connection with relative path
+    include __DIR__ . '/../../inc/db.php';
 
     ini_set('display_errors','1');
 
-    if(!$_SESSION['AUID']){
-      $return_data = array("result" => "member");
-      echo json_encode($return_data);
-      exit;
-    };
+    // Improved authentication check
+    if (!isset($_SESSION['AUID'])) {
+        echo "<script>
+                alert('접근 권한이 없습니다');
+                location.href = '../login.php';
+            </script>";
+        exit;
+    }
+
+    // Use project root relative path for saving images
+    $save_dir = __DIR__ . '/../../pdata/';
+    
+    // Ensure the directory exists
+    if (!is_dir($save_dir)) {
+        mkdir($save_dir, 0755, true);
+    }
 
     if($_FILES['savefile']['size']>10240000){
       $return_data = array("result" => "size");
@@ -22,7 +35,6 @@
       exit;
     }
 
-    $save_dir = $_SERVER['DOCUMENT_ROOT']."/pdata/";
     $filename = $_FILES['savefile']['name'];
     $ext = pathinfo($filename,PATHINFO_EXTENSION); //확장자
     $newfilename = iconv_substr($filename,0,7).date("ymdHis").substr(rand(),0,6);

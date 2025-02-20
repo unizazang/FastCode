@@ -1,11 +1,11 @@
 <?php
     session_start();
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    include __DIR__ . '/../../inc/db.php';
 
-    if(!$_SESSION['AUID']){
+    if (!isset($_SESSION['AUID'])) {
         echo "<script>
-                alert('권한이 없습니다.');
-                history.back();
+                alert('접근 권한이 없습니다');
+                location.href = '../login.php';
             </script>";
         exit;
     };
@@ -41,7 +41,9 @@
             exit;
         }
     
-        if($_FILES['thumbnail']['type'] != 'image/png' and $_FILES['thumbnail']['type'] != 'image/gif' and $_FILES['thumbnail']['type'] != 'image/jpeg'){ 
+        if($_FILES['thumbnail']['type'] != 'image/png' 
+            && $_FILES['thumbnail']['type'] != 'image/gif' 
+            && $_FILES['thumbnail']['type'] != 'image/jpeg'){ 
             echo "<script>
                 alert('이미지만 첨부 가능합니다.');
                 history.back();
@@ -49,7 +51,11 @@
             exit;
         }
 
-        $save_dir = $_SERVER['DOCUMENT_ROOT']."/pdata/";
+        $save_dir = __DIR__ . '/../../pdata/';
+        if (!is_dir($save_dir)) {
+            mkdir($save_dir, 0755, true);
+        }
+
         $filename = $_FILES['thumbnail']['name'];
         $ext = pathinfo($filename,PATHINFO_EXTENSION); //확장자
         $newfilename = iconv_substr($name,0,10).date("ymdHis").substr(rand(),0,6);

@@ -1,27 +1,45 @@
 <?php 
     session_start();
-    if(!$_SESSION['AUID']){
-      echo "<script>
-              alert('접근 권한이 없습니다');
-              history.back();
-          </script>";
-    };
+    
+    // Improved authentication check
+    if (!isset($_SESSION['AUID'])) {
+        echo "<script>
+                alert('접근 권한이 없습니다');
+                location.href = '../login.php';
+            </script>";
+        exit;
+    }
 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    // Include database connection and head
+    include __DIR__ . '/../../inc/db.php';
+    include __DIR__ . '/../../inc/head.php';
 
-    $bno = $_GET['idx'];
+    $bno = $_GET['idx'] ?? 0;
 
-    $sql = "SELECT * from board where idx='".$bno."'"; 
-    $result = $mysqli -> query($sql) or die("Query Error ! => ".$mysqli -> error);
+    try {
+        // Use prepared statement
+        $sql = "SELECT * FROM board WHERE idx = ?"; 
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("i", $bno);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $rsc = $result -> fetch_object();
+        $rsc = $result->fetch_object();
+    } catch (Exception $e) {
+        error_log("Database Error in board_read.php: " . $e->getMessage());
+        echo "<script>
+                alert('데이터베이스 오류가 발생했습니다');
+                history.back();
+            </script>";
+        exit;
+    }
 ?>
 
 <link rel="stylesheet" href="../css/board_delete.css" />
 <link rel="stylesheet" href="../css/board_read.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
 
@@ -34,19 +52,22 @@
           <div class="board_area pd-81">
             <div class="read_top">
               <ul>
-                <li class="title"><?= $rsc -> title; ?></li>
-                <li class="name"><?= $rsc -> name; ?></li>
-                <li class="date"><?= $rsc -> date; ?></li>
+                <li class="title"><?= htmlspecialchars($rsc -> title); ?></li>
+                <li class="name"><?= htmlspecialchars($rsc -> name); ?></li>
+                <li class="date"><?= htmlspecialchars($rsc -> date); ?></li>
               </ul>
             </div>
             <div class="read_content">
                 <?php 
-                if($rsc -> is_img == 1){
+                if($rsc -> is_img == 1 && !empty($rsc -> file)){
                 ?>
                 <!-- 이미지일때 -->
-                <img src="./board_files/<?= $rsc -> file; ?> " target="blank"><br><br>
+                <?php 
+                $imagePath = "/pdata/" . basename($rsc -> file);
+                ?>
+                <img src="<?= htmlspecialchars($imagePath); ?>" alt="Board Image" target="blank"><br><br>
               <?php } ?>
-              <?= nl2br($rsc -> content); ?>
+              <?= nl2br(htmlspecialchars($rsc -> content)); ?>
               <br>
               <div class="read_btns">
                 <a href="./board_modify.php?idx=<?= $bno; ?>" class="edit">수정</a>
@@ -83,7 +104,7 @@
         <!-- 팝업 HTML 끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+    include __DIR__ . '/../../inc/footer.php';
 ?>
 <script
   src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
@@ -114,5 +135,5 @@
 
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . '/../../inc/foot.php';
  ?>
