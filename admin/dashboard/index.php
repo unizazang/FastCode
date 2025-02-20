@@ -9,7 +9,8 @@
   };
   $book_mark = $_SESSION['ADBOOK'];
 
-  include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+  // include __DIR__ . "/../../inc/head.php";
+  include __DIR__ . "/../../inc/head.php";
 
 
 //BookMark List
@@ -85,7 +86,7 @@ ORDER BY orderNumber ASC";
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <?php 
-  include $_SERVER['DOCUMENT_ROOT']."/inc/common.php";
+  include __DIR__ . "/../../inc/common.php";
 ?>
 </div>
 <!-- 로고 및 북마크 위치 끝 -->
@@ -151,7 +152,7 @@ ORDER BY orderNumber ASC";
 </div>
     
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
 
 <script>
@@ -286,5 +287,5 @@ ORDER BY orderNumber ASC";
 
 </script>
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+  include __DIR__ . "/../../inc/foot.php";
 ?>

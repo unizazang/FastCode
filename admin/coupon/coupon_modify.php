@@ -6,8 +6,8 @@
               history.back();
           </script>";
     };
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    include __DIR__ . "/../../inc/db.php";
+    include __DIR__ . "/../../inc/head.php";
 
 
     $cno = $_GET['cid'];
@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="../css/coupon_up.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . "/../../inc/common.php"; 
 ?>
 
 </div>
@@ -166,7 +166,7 @@
 <!-- 본문끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
 
 <script
@@ -189,5 +189,5 @@
 
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . "/../../inc/foot.php";
 ?>

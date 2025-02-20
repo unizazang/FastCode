@@ -9,13 +9,13 @@
   };
   $book_mark = $_SESSION['ADBOOK'];
   
-  include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+  include __DIR__ . "/../../inc/head.php";
 ?>
 
   <link rel="stylesheet" href="../css/lecture_list.css" />
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/common.php";  
+  include __DIR__ . "/../../inc/common.php";  
 
   //카테고리 select
   $query = "SELECT * from category where step=1";
@@ -266,7 +266,7 @@
         </main>
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -374,5 +374,5 @@ $('#bookmark1').click(function() {
   </script>
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+  include __DIR__ . "/../../inc/foot.php";
 ?>

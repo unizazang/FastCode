@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    include __DIR__ . "/../../inc/db.php";
 
     $cid = $_POST['idx'];
     $sql = "DELETE from coupons WHERE cid='".$cid."'"; 

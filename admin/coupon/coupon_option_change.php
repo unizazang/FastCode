@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    include __DIR__ . "/../../inc/db.php";
 
     $idx = $_POST['selectedidx'];
     $status = $_POST['selectedStatus'];

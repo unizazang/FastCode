@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    include __DIR__ . "/../../inc/db.php";
 
     ini_set('display_errors','1');
 

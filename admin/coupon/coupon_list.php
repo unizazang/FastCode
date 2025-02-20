@@ -7,7 +7,7 @@
           </script>";
     };
     $book_mark = $_SESSION['ADBOOK'];
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    include __DIR__ . "/../../inc/head.php";
     
     
     /* ================== 페이지네이션 =================== */
@@ -45,7 +45,7 @@
 <link rel="stylesheet" href="../css/coupon_list.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . "/../../inc/common.php";
 ?>
 
         <div class="bookmark">
@@ -192,7 +192,8 @@
         <!-- 팝업 HTML 끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
+
 ?>
 <script
   src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
@@ -309,5 +310,6 @@ let bookmark = String(<?php echo json_encode($book_mark);?>);
 </script>
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . "/../../inc/foot.php";
+    include __DIR__ . "/../../inc/footer.php";
  ?>
