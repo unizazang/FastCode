@@ -1,24 +1,25 @@
 <?php 
     session_start();
-    if(!$_SESSION['AUID']){
-      echo "<script>
-              alert('접근 권한이 없습니다');
-              history.back();
-          </script>";
-    };
+    
+    // Check user authentication
+    if (!isset($_SESSION['AUID'])) {
+        echo "<script>
+                alert('접근 권한이 없습니다');
+                history.back();
+            </script>";
+        exit;
+    }
 
-    $book_mark = $_SESSION['ADBOOK'];
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
-
+    // Include database connection
+    include __DIR__ . '/../../inc/db.php';
+    include __DIR__ . '/../../inc/head.php';
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
 <link rel="stylesheet" href="../css/board_write.css" />
 
 <!-- ========= 본문시작 =========== -->
 
-<?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
-?>
 
         <div class="bookmark">
           <input type="checkbox" id="bookmark1" />
@@ -85,13 +86,14 @@
 
   
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+    include __DIR__ . '/../../inc/footer.php';
+    include __DIR__ . '/../../inc/foot.php';
 ?>
 
 <script>
 /* ======================= 북마크 ========================= */
 //북마크
-let bookmark = String(<?php echo json_encode($book_mark);?>);
+let bookmark = String(<?php echo json_encode($_SESSION['ADBOOK']);?>);
   // console.log('$_SESSION[ADBOOK] : ' + bookmark);
   if(bookmark != '0') {
     if (bookmark.indexOf('2') != -1 ) {
@@ -145,7 +147,3 @@ let bookmark = String(<?php echo json_encode($book_mark);?>);
   });
 
 </script>
-
-<?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
- ?>

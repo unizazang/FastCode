@@ -2,10 +2,10 @@
     session_start();
     include __DIR__ . '/../inc/db.php';
     
-    $_SESSION['AUID'];
+    $_SESSION['AUID'] = '';
     $_SESSION['ADBOOK'] = 0;
-    $_SESSION['ADIDX'];
-    $_SESSION['ADIMG'];
+    $_SESSION['ADIDX'] = '';
+    $_SESSION['ADIMG'] = '';
 
     $userid = $_POST["userid"];
     $passwd = $_POST["passwd"];

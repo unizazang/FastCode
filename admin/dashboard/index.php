@@ -1,27 +1,36 @@
 <?php
   session_start();
   
-  if(!$_SESSION['AUID']){
+  // Include database connection before using $mysqli
+  include __DIR__ . '/../../inc/db.php';
+  
+  if(!isset($_SESSION['AUID'])){
     echo "<script>
     alert('접근 권한이 없습니다');
     history.back();
     </script>";
-  };
-  $book_mark = $_SESSION['ADBOOK'];
+    exit;
+  }
+  
+  $book_mark = isset($_SESSION['ADBOOK']) ? $_SESSION['ADBOOK'] : '';
 
-  include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+  // Use relative path for includes
+  include __DIR__ . '/../../inc/head.php';
 
+  // Only run bookmark query if book_mark is not empty
+  $bmk = [];
+  if (!empty($book_mark)) {
+    //BookMark List
+    $sql_bookmark = "SELECT * FROM bookmark WHERE pageCode IN ({$book_mark}) ORDER BY FIELD(pageCode,{$book_mark}) LIMIT 0 , 6";
+    $result_bookmark = $mysqli->query($sql_bookmark);
 
-//BookMark List
-  $sql_bookmark = "SELECT * FROM bookmark WHERE pageCode IN ({$book_mark}) ORDER BY FIELD(pageCode,{$book_mark}) LIMIT 0 , 6";
-  $result_bookmark = $mysqli -> query($sql_bookmark);
-
-  while($rs_bookmark = $result_bookmark ->fetch_object()){
-    $bmk[] = $rs_bookmark;
+    while($rs_bookmark = $result_bookmark->fetch_object()){
+      $bmk[] = $rs_bookmark;
+    }
   }
  
   
-//Chart
+  //Chart
   $sql = "SELECT X.labels,  X.data
     FROM (SELECT D.name AS 'labels',
     COUNT(*) AS 'data',
@@ -38,33 +47,38 @@
 ) X
 ORDER BY orderNumber ASC";
 
-  $result = $mysqli -> query($sql);
-  while($rs = $result ->fetch_object()) {
-  $data_json[] = $rs;
-  $labels[] = $rs->labels;
-  $data[] = $rs->data;   
+  $data_json = [];
+  $labels = [];
+  $data = [];
+
+  $result = $mysqli->query($sql);
+  while($rs = $result->fetch_object()) {
+    $data_json[] = $rs;
+    $labels[] = $rs->labels;
+    $data[] = $rs->data;   
   }
 
-//Chart2
+  //Chart2
   $sql_total = "SELECT C.name, COUNT(C.name) AS 'cnt',
                 CASE WHEN C.name = '프론트엔드' THEN 1
                 WHEN C.name = '백엔드' THEN 2
                 WHEN C.name = 'UX/UI' THEN 3
                 WHEN C.name = '일반 디자인' THEN 4
                 WHEN C.name = '기타' THEN 5
-                ELSE 100 END AS 'orderNumber'
+                ELSE 100
+                END AS 'orderNumber'
                 FROM lectures L
-                INNER JOIN user_lectures UL ON UL.lecid = L.lecid
-                INNER JOIN category C ON C.code = L.cate_mid
+                JOIN category C ON L.cate_mid = C.code
                 GROUP BY C.name
                 ORDER BY orderNumber ASC";
 
-  $result_total = $mysqli -> query($sql_total);
-  while($rs_total = $result_total ->fetch_object()) {
-    $totalCnt[] = $rs_total->cnt;
+  $result_total = $mysqli->query($sql_total);
+  $total_data = [];
+  while($rs_total = $result_total->fetch_object()) {
+    $total_data[] = $rs_total;
   }
 
-// 신규강의
+  // 신규강의
   $sql2 = "SELECT * 
   FROM lectures 
   WHERE reg_date
@@ -72,20 +86,21 @@ ORDER BY orderNumber ASC";
   AND NOW() 
   ORDER BY lecid DESC
   LIMIT 0 , 4";
-  $result2 = $mysqli -> query($sql2);
+  $result2 = $mysqli->query($sql2);
 
-  while($rs2 = $result2 ->fetch_object()) {
-  $lecture_id[]=$rs2;
-}
+  $lecture_id = [];
+  while($rs2 = $result2->fetch_object()) {
+    $lecture_id[] = $rs2;
+  }
 
 ?>
-  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../../css/dashboard.css" />
   <script src="caleandar.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 <?php 
-  include $_SERVER['DOCUMENT_ROOT']."/inc/common.php";
+  include __DIR__ . '/../../inc/common.php';
 ?>
 </div>
 <!-- 로고 및 북마크 위치 끝 -->
@@ -98,7 +113,7 @@ ORDER BY orderNumber ASC";
     if($book_mark != 0) {
       foreach($bmk as $b) {?>
     <li>
-      <a href="../<?php echo $b->pageUrl;?>" class="bookmark-item d-flex flex-column justify-content-center">
+      <a href="../../<?php echo $b->pageUrl;?>" class="bookmark-item d-flex flex-column justify-content-center">
         <i class="<?php echo $b->iconName;?>"></i>
         <span><?php echo $b->pageName;?></span>
       </a>
@@ -119,7 +134,7 @@ ORDER BY orderNumber ASC";
         <div id='legend-div' class="legend-div"></div>
       </div>
     </div>
-    <span><a href="../category/category_list.php">더보기 &#43;</a></span>
+    <span><a href="../../category/category_list.php">더보기 &#43;</a></span>
   </section>
   <section id="click-data">
     <h3 class="main-menu-ft">카테고리 별 판매량</h3>
@@ -135,13 +150,13 @@ ORDER BY orderNumber ASC";
     if(isset($lecture_id)) {
       foreach($lecture_id as $lid) {?>
       <li class="newcourse-item content-text-1">
-        <a href="../lecture/lecture_view.php?lecid=<?php echo $lid->lecid; ?>"><?php echo  $lid->name;?></a>
+        <a href="../../lecture/lecture_view.php?lecid=<?php echo $lid->lecid; ?>"><?php echo  $lid->name;?></a>
     </li>
     <?php } } else { ?>
       <li class="newcourse-item content-text-1 lecture_empty">업데이트 된 강의가 없습니다.</li>
     <?php }?>
     </ul>
-    <span><a href="../lecture/lecture_list.php">더보기 &#43;</a></span>
+    <span><a href="../../lecture/lecture_list.php">더보기 &#43;</a></span>
   </section>
   <section id="calendar-data">
     <h3 class="main-menu-ft">일정</h3>
@@ -151,14 +166,14 @@ ORDER BY orderNumber ASC";
 </div>
     
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . '/../../inc/footer.php';
 ?>
 
 <script>
   let bookmark = String(<?php echo json_encode($book_mark);?>);
   let element = caleandar(document.querySelector('#calendar'));
   let jsonArray = <?php echo json_encode($data_json);?>;
-  let totalCnt = <?php echo json_encode($totalCnt);?>;
+  let totalCnt = <?php echo json_encode(array_column($total_data, 'cnt'));?>;
   let labelsArray = new Array();
   let dataArray = new Array();
 
@@ -286,5 +301,5 @@ ORDER BY orderNumber ASC";
 
 </script>
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+  include __DIR__ . '/../../inc/foot.php';
 ?>

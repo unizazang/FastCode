@@ -1,22 +1,29 @@
 <?php 
     session_start();
-    if(!$_SESSION['AUID']){
+    
+    // Include database connection
+    include __DIR__ . '/../../inc/db.php';
+    
+    if(!isset($_SESSION['AUID'])){
       echo "<script>
               alert('접근 권한이 없습니다');
               history.back();
           </script>";
-    };
-    $book_mark = $_SESSION['ADBOOK'];
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+      exit;
+    }
     
+    $book_mark = $_SESSION['ADBOOK'] ?? 0;
+    
+    // Use relative path for includes
+    include __DIR__ . '/../../inc/head.php';
     
     /* ================== 페이지네이션 =================== */
 
     $page = $_GET['page'] ?? 1;
 
     $pagesql = "SELECT COUNT(*) as cnt FROM coupons";
-    $page_result = $mysqli -> query($pagesql);
-    $page_row = $page_result ->fetch_assoc();
+    $page_result = $mysqli->query($pagesql);
+    $page_row = $page_result->fetch_assoc();
     $row_num = $page_row['cnt'];
   
     $list = 5;
@@ -32,20 +39,25 @@
     $total_block = ceil($total_page/$block_ct);
     $start_num = ($page - 1) * $list;
 
-      /* ================== 값 조회 =================== */
+    /* ================== 값 조회 =================== */
   
-      $sql = "SELECT * from coupons order by cid desc limit $start_num, $list";
-      $result = $mysqli -> query($sql) or die("Query Error! => ".$mysqli->error);
-      while($rs = $result->fetch_object()){
-          $rsc[] = $rs;
-      }  
+    $sql = "SELECT * from coupons order by cid desc limit ?, ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("ii", $start_num, $list);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $rsc = [];
+    while($rs = $result->fetch_object()){
+        $rsc[] = $rs;
+    }  
 ?>
 
 <link rel="stylesheet" href="../css/coupon_delete.css" />
 <link rel="stylesheet" href="../css/coupon_list.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . '/../../inc/common.php'; 
 ?>
 
         <div class="bookmark">
@@ -192,7 +204,7 @@
         <!-- 팝업 HTML 끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . '/../../inc/footer.php';
 ?>
 <script
   src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
@@ -309,5 +321,5 @@ let bookmark = String(<?php echo json_encode($book_mark);?>);
 </script>
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . '/../../inc/foot.php';
  ?>

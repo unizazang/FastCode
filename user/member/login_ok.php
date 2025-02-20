@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include $_SERVER["DOCUMENT_ROOT"]."/inc/db.php";
+include __DIR__ . '/../../inc/db.php';
 
 $userid=$_POST["userid"];
 $passwd=$_POST["passwd"];
@@ -13,8 +13,7 @@ $rs = $result->fetch_object();
 if($rs){
     $_SESSION['USERID'] = $rs->userid;
     $_SESSION['USERNAME'] = $rs->username;
-    // $sql = "UPDATE cart set userid='".$userid."' where ssid='".session_id()."'"; 
-    $result = $mysqli -> query($sql) or die('Query error=>'.$mysqli->error);
+    
     echo '<script>history.go(-2);</script>';
     exit;
 } else{

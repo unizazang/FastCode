@@ -1,10 +1,8 @@
 <?php
-    $hostname = 'localhost';
-    $dbuserid = 'unizazang123';
-    $dbpasswd = 'ehflxhtm1!';
-    $dbname = 'unizazang123';
+    require_once __DIR__ . '/config.php';
 
-    $mysqli = new mysqli($hostname,$dbuserid, $dbpasswd,$dbname);
+    // Use the db_connect function from config.php
+    $mysqli = db_connect();
     if($mysqli -> connect_errno){
         die('Connect Error:'.$mysqli->connect_error);
     } 
