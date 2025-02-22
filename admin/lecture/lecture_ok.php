@@ -61,7 +61,7 @@
         $newfilename = iconv_substr($name,0,10).date("ymdHis").substr(rand(),0,6);
         $thumbnail = $newfilename.'.'.$ext ;
         if(move_uploaded_file($_FILES['thumbnail']['tmp_name'], $save_dir.$thumbnail)){
-            $thumbnail = "/pdata/".$thumbnail;
+            $thumbnail = "../../pdata/".$thumbnail;
         }else{
             echo "<script>
                 alert('이미지를 등록할 수 없습니다. 관리자에게 문의해주세요.');

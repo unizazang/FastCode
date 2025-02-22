@@ -8,13 +8,13 @@
   };
   $book_mark = $_SESSION['ADBOOK'];
 
-  include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+  include __DIR__ . "/../../inc/head.php";
 ?>
 
   <link rel="stylesheet" href="../css/category.css" />
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/common.php";
+  include __DIR__ . "/../../inc/common.php";
 
   $query = "SELECT * from category where step=1";
 
@@ -159,7 +159,7 @@
           </div>
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
 
     <script
@@ -339,5 +339,5 @@
     </script>
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+  include __DIR__ . "/../../inc/foot.php";
 ?>
