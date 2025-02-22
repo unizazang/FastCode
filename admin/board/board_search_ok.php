@@ -7,7 +7,7 @@
           </script>";
     };
 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    include __DIR__ . "/../../inc/head.php";
 
     /* ======================== search =========================== */
 
@@ -62,7 +62,7 @@
 <link rel="stylesheet" href="../css/board_index.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . "/../../inc/common.php"; 
 ?>
 
 </div>
@@ -178,7 +178,7 @@
 
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
 <script
   src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous">
@@ -215,5 +215,5 @@
 
   </script>
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . "/../../inc/foot.php";
  ?>

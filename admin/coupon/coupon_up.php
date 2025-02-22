@@ -7,14 +7,14 @@
           </script>";
     };
     $book_mark = $_SESSION['ADBOOK'];
-    include $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+    include __DIR__ . "/../../inc/head.php";
 
 ?>
 
 <link rel="stylesheet" href="../css/coupon_up.css" />
 
 <?php     
-    include $_SERVER['DOCUMENT_ROOT']."/inc/common.php"; 
+    include __DIR__ . "/../../inc/common.php"; 
 ?>
 
         <div class="bookmark">
@@ -163,7 +163,7 @@
 <!-- 본문끝 -->
 
 <?php
-  include $_SERVER['DOCUMENT_ROOT']."/inc/footer.php";
+  include __DIR__ . "/../../inc/footer.php";
 ?>
 
 <script
@@ -240,5 +240,5 @@ let bookmark = String(<?php echo json_encode($book_mark);?>);
 </script>
 
 <?php 
-    include $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+    include __DIR__ . "/../../inc/foot.php";
 ?>

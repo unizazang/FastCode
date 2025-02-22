@@ -7,7 +7,7 @@
           </script>";
     };
         
-    include $_SERVER['DOCUMENT_ROOT']."/inc/db.php";
+    include __DIR__ . "/../../inc/db.php";
 
     
     $coupon_name = $_POST["coupon_name"];//쿠폰명
